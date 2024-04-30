@@ -23,6 +23,21 @@ public class problem3 {
         //set the result to the proper index of the output array
         //hint: don't forget to handle the data types properly, the result datatype should be the same as the original datatype
         
+        //Shreya Bose
+        //sb57
+        //February 5, 2024
+
+        for (int i = 0; i < arr.length; i++) {
+            T element = arr[i];
+            if (element instanceof Integer) {
+                output[i] = Math.abs((Integer) element);
+            } else if (element instanceof Double) {
+                output[i] = Math.abs((Double) element);
+            } else if (element instanceof String) {
+                output[i] = Integer.toString(Math.abs(Integer.parseInt((String) element)));
+            }
+        }
+    
         //end edit section
 
         StringBuilder sb = new StringBuilder();
