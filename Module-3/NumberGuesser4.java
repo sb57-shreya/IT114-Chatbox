@@ -131,13 +131,27 @@ public class NumberGuesser4 {
             pickNewRandom = true;
         } else {
             System.out.println("That's wrong");
+            int diff = Math.abs(number - guess);
+            if (diff > 5) {
+                System.out.println("Cold");
+            } else if (diff > 2) {                         //Shreya Bose
+                System.out.println("Warm");              //sb57
+            } else {                                       //February 12, 2024
+                System.out.println("Hot");
+            }
+            if (guess < number) {
+                System.out.println("Go higher!");         //Shreya Bose
+            } else {                                        //sb57
+                System.out.println("Go lower!");          //February 12, 2024
+            }
             strikes++;
             if (strikes >= maxStrikes) {
                 lose();
                 pickNewRandom = true;
+            } else {
+                saveState();
             }
         }
-        saveState();
     }
 
     private int strToNum(String message) {
