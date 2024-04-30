@@ -6,12 +6,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class Server {
     int port = 3001;
     // connected clients
     private List<ServerThread> clients = new ArrayList<ServerThread>();
 
+    //initializing variables for number guesser game implementation
+    private boolean gameActive = false;          //Shreya Bose
+    private int secretNumber;                    //sb57
+                                                 //February 19,2024
     private void start(int port) {
         this.port = port;
         // server listening
@@ -82,6 +87,47 @@ public class Server {
             }
             return true;
         }
+
+        //Number Guessing Game
+        if (gameActive) {
+            if (message.startsWith("guess: ")) {
+                try {                                                                     //Shreya Bose
+                    int guess = Integer.parseInt(message.split(" ")[1]);            //sb57
+                    boolean isCorrect = (guess == secretNumber);                          //February 19, 2024
+                    String response = isCorrect ? "correct" : "incorrect";
+                    broadcast(String.format("User[%d] guessed %d and it was %s", clientId, guess, response), clientId);
+                    if (isCorrect) {
+                        gameActive = false;
+                    }
+                    return true;
+                } catch (NumberFormatException e) {
+                    broadcast(String.format("User[%d] made an invalid guess", clientId), clientId);
+                    return true;
+                }
+            }
+        }
+
+        if (message.equalsIgnoreCase("start")) {
+            gameActive = true;
+            secretNumber = new Random().nextInt(10) + 1;
+            broadcast("Number Guessing Game! Guess a number. Make sure to type 'guess:' and then your guess." , clientId);
+            return true;
+        }
+
+        if (message.equalsIgnoreCase("stop")) {
+            gameActive = false;
+            broadcast("Number Guessing Game Exited.", clientId);
+            return true;
+        }
+
+        //Coin Toss Command
+        if (message.equalsIgnoreCase("flip coin") || message.equalsIgnoreCase("toss coin")) {
+            Random rand = new Random();
+            String result = rand.nextBoolean() ? "heads" : "tails";                                                 //Shreya Bose
+            broadcast(String.format("User[%d] flipped a coin and got %s", clientId, result), clientId);      //sb57
+            return true;                                                                                            //February 19, 2024
+        }
+
         return false;
     }
     public static void main(String[] args) {
