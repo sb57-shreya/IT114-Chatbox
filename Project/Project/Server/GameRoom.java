@@ -1,4 +1,4 @@
-package Project.server;
+package Project.Server;
 
 public class GameRoom extends Room {
 
